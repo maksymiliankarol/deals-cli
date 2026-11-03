@@ -1,0 +1,21 @@
+# build output
+/deals
+/deals.exe
+dist/
+
+# env and secrets
+.env
+.env.*
+
+# editors
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+
+# logs
+*.log
+
+# private
+TODO.md
