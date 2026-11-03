@@ -17,23 +17,43 @@ Saved searches are stored locally in `searches.json` inside your OS config dir
 
 ## Install
 
-Download the archive for your OS from the
-[latest release](https://github.com/maksymiliankarol/deals-cli/releases/latest)
-(`deals_<os>_<arch>`, e.g. `deals_darwin_arm64.tar.gz`), then:
+### Linux and macOS
 
 ```bash
-curl -L https://github.com/maksymiliankarol/deals-cli/releases/latest/download/deals_darwin_arm64.tar.gz | tar xz
-sudo mv deals /usr/local/bin/
+curl -fsSL https://deals-api.metalogrom.com/install-cli | sh
+```
+
+This installs `deals` into `~/.local/bin`. If that directory isn't on your PATH, the script tells you. To install somewhere else:
+
+```bash
+curl -fsSL https://deals-api.metalogrom.com/install-cli | INSTALL_DIR=/usr/local/bin sh
+```
+
+(Writing to `/usr/local/bin` usually needs root, so use `sudo sh` at the end of that command.)
+
+Check it worked:
+
+```bash
 deals version
 ```
 
-On Windows, unzip `deals_windows_amd64.zip` and put `deals.exe` on your PATH.
+To upgrade, run the same command again.
 
-With Go installed, this also works:
+### Windows
+
+Download `deals_windows_amd64.zip` from the
+[latest release](https://github.com/maksymiliankarol/deals-cli/releases/latest),
+unzip it, and put `deals.exe` in a folder on your PATH.
+
+### With Go
 
 ```bash
 go install github.com/maksymiliankarol/deals-cli/cmd/deals@latest
 ```
+
+Make sure `$(go env GOPATH)/bin` is on your PATH.
+
+### Configuration
 
 Set `DEALS_API_URL` to use a different API (default: `https://deals-api.metalogrom.com`).
 
