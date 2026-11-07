@@ -91,12 +91,16 @@ func savedQuery(n int) (string, error) {
 	return list[n-1], nil
 }
 
-func savedPath() (string, error) {
+func configPath(name string) (string, error) {
 	dir, err := os.UserConfigDir()
 	if err != nil {
 		return "", err
 	}
-	return filepath.Join(dir, "deals-cli", "searches.json"), nil
+	return filepath.Join(dir, "deals-cli", name), nil
+}
+
+func savedPath() (string, error) {
+	return configPath("searches.json")
 }
 
 func loadSaved() ([]string, error) {
@@ -132,3 +136,4 @@ func writeSaved(list []string) error {
 	}
 	return os.WriteFile(path, data, 0o600)
 }
+

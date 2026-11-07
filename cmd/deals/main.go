@@ -7,12 +7,15 @@ import (
 )
 
 const helpText = `usage:
-  deals search <query>
+  deals search <query>           find buyers matching your query
   deals search -s <query>        run a search and save it
   deals search --saved <n>       run saved search #n
   deals saved                    list saved searches
   deals saved add <query>        save a search
   deals saved rm <n>             remove saved search #n
+  deals unlock <id>              get a payment link for listing #id
+	deals unlocked                 list contacts you unlocked
+  deals unlocked rm <id>         remove an unlocked contact
   deals buy --description <text> --email <email> --phone <phone>
   deals version                  print version
   deals help                     show this help`
@@ -30,6 +33,10 @@ func main() {
 		err = runBuy(os.Args[2:])
 	case "saved":
 		err = runSaved(os.Args[2:])
+	case "unlock":
+		err = runUnlock(os.Args[2:])
+	case "unlocked":
+		err = runUnlocked(os.Args[2:])
 	case "version", "-v", "--version":
 		fmt.Println(version())
 	case "help", "-h", "--help":

@@ -25,12 +25,14 @@ func apiError(resp *http.Response) error {
 	body, _ := io.ReadAll(io.LimitReader(resp.Body, 8192))
 
 	switch resp.StatusCode {
-	case http.StatusTooManyRequests:
-		return errors.New("too many requests, wait a minute and try again")
-	case http.StatusBadRequest:
-		if msg := validationMessage(body); msg != "" {
-			return errors.New(msg)
-		}
+		case http.StatusTooManyRequests:
+			return errors.New("too many requests, wait a minute and try again")
+		case http.StatusConflict:
+			return errors.New("listing is not available (taken or held by someone else)")
+		case http.StatusBadRequest:
+			if msg := validationMessage(body); msg != "" {
+				return errors.New(msg)
+			}
 	}
 	return fmt.Errorf("%s: %s", resp.Status, body)
 }
