@@ -153,7 +153,11 @@ go fmt ./... && go vet ./... && go build ./...
 # 3. (optional) build all release binaries locally into dist/, nothing is published
 goreleaser release --snapshot --clean
 
-# 4. tag and push; this triggers the GitHub Actions release workflow
+# 4. check last tag
+git describe --tags --abbrev=0          # latest tag reachable from here
+git tag --sort=-v:refname | head -1     # latest tag by version
+
+# 5. tag and push; this triggers the GitHub Actions release workflow
 git tag v0.0.1
 git push origin v0.0.1
 ```

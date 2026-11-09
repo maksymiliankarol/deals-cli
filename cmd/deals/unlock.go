@@ -35,7 +35,9 @@ func runUnlock(args []string) error {
 		return fmt.Errorf("invalid id %q", args[0])
 	}
 
+	done := status("Creating payment link...")
 	sessionID, payURL, err := startUnlock(id)
+	done()
 	if err != nil {
 		return err
 	}

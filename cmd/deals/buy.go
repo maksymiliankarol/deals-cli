@@ -32,7 +32,9 @@ func runBuy(args []string) error {
 		return err
 	}
 
+	done := status("Sending...")
 	resp, err := httpClient.Post(apiURL()+"/buy", "application/json", bytes.NewReader(body))
+	done()
 	if err != nil {
 		return err
 	}

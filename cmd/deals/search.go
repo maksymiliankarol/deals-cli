@@ -49,7 +49,9 @@ func runSearch(args []string) error {
 }
 
 func search(q string) error {
+	done := status("Searching...")
 	resp, err := httpClient.Get(apiURL() + "/search?q=" + url.QueryEscape(q))
+	done()
 	if err != nil {
 		return err
 	}
