@@ -14,7 +14,7 @@ const helpText = `usage:
   deals saved add <query>        save a search
   deals saved rm <n>             remove saved search #n
   deals unlock <id>              get a payment link for listing #id
-	deals unlocked                 list contacts you unlocked
+  deals unlocked                 list contacts you unlocked
   deals unlocked rm <id>         remove an unlocked contact
   deals buy --description <text> --email <email> --phone <phone>
   deals version                  print version

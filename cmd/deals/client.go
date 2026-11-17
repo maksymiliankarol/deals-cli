@@ -20,36 +20,24 @@ func apiURL() string {
 	return "https://deals-api.metalogrom.com"
 }
 
-// apiMessage returns the "error" and "code" fields of an API error body.
-func apiMessage(body []byte) (msg, code string) {
+// apiMessage returns the "error" field of an API error body.
+func apiMessage(body []byte) string {
 	var e struct {
 		Error string `json:"error"`
-		Code  string `json:"code"`
 	}
 	_ = json.Unmarshal(body, &e)
-	return e.Error, e.Code
+	return e.Error
 }
 
 // apiError turns a non-success response into a readable error.
 func apiError(resp *http.Response) error {
 	body, _ := io.ReadAll(io.LimitReader(resp.Body, 8192))
-	msg, code := apiMessage(body)
 
-	switch resp.StatusCode {
-	case http.StatusTooManyRequests:
-		if code == "too_many_reservations" {
-			return errors.New(msg)
-		}
-		return errors.New("too many requests, wait a minute and try again")
-	case http.StatusConflict:
-		return errors.New("listing is not available (taken or held by someone else)")
-	case http.StatusBadRequest:
-		if m := validationMessage(body); m != "" {
-			return errors.New(m)
-		}
-		if msg != "" {
-			return errors.New(msg)
-		}
+	if m := validationMessage(body); m != "" {
+		return errors.New(m)
+	}
+	if m := apiMessage(body); m != "" {
+		return errors.New(m)
 	}
 	return fmt.Errorf("%s: %s", resp.Status, body)
 }
