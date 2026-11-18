@@ -2,7 +2,7 @@ package main
 
 import (
 	"bytes"
-	"encoding/json"
+	"encoding/json/v2"
 	"errors"
 	"flag"
 	"fmt"
@@ -47,7 +47,7 @@ func runBuy(args []string) error {
 	var created struct {
 		ID int `json:"id"`
 	}
-	if err := json.NewDecoder(resp.Body).Decode(&created); err != nil {
+	if err := json.UnmarshalRead(resp.Body, &created); err != nil {
 		return err
 	}
 	fmt.Printf("Created listing #%d\n", created.ID)

@@ -64,7 +64,11 @@ Check it worked:
 deals version
 ```
 
-To upgrade, run the same command again.
+To upgrade, run `deals update` (Linux and macOS; on Windows download the zip again).
+It re-runs the installer into the folder where `deals` currently lives.
+
+`deals` checks for a new version at most once a day and prints a notice on stderr.
+Set `DEALS_NO_UPDATE_CHECK=1` to turn that off.
 
 ### Windows
 

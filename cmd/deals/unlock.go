@@ -1,7 +1,7 @@
 package main
 
 import (
-	"encoding/json"
+	"encoding/json/v2"
 	"errors"
 	"fmt"
 	"net/http"
@@ -81,7 +81,7 @@ func startUnlock(id int) (sessionID, payURL string, err error) {
 		URL       string `json:"url"`
 		SessionID string `json:"sessionId"`
 	}
-	if err := json.NewDecoder(resp.Body).Decode(&s); err != nil {
+	if err := json.UnmarshalRead(resp.Body, &s); err != nil {
 		return "", "", err
 	}
 	return s.SessionID, s.URL, nil
@@ -110,7 +110,7 @@ func checkUnlock(sessionID string) (*unlocked, error) {
 	switch resp.StatusCode {
 	case http.StatusOK:
 		var u unlocked
-		if err := json.NewDecoder(resp.Body).Decode(&u); err != nil {
+		if err := json.UnmarshalRead(resp.Body, &u); err != nil {
 			return nil, err
 		}
 		return &u, nil

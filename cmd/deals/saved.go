@@ -1,7 +1,8 @@
 package main
 
 import (
-	"encoding/json"
+	"encoding/json/jsontext"
+	"encoding/json/v2"
 	"errors"
 	"fmt"
 	"io/fs"
@@ -130,7 +131,7 @@ func writeSaved(list []string) error {
 	if err := os.MkdirAll(filepath.Dir(path), 0o700); err != nil {
 		return err
 	}
-	data, err := json.MarshalIndent(list, "", "  ")
+	data, err := json.Marshal(list, jsontext.WithIndent("  "))
 	if err != nil {
 		return err
 	}

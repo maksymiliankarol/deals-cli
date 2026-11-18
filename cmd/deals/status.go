@@ -6,6 +6,11 @@ import (
 	"strings"
 )
 
+func isTerminal(f *os.File) bool {
+	fi, err := f.Stat()
+	return err == nil && fi.Mode()&os.ModeCharDevice != 0
+}
+
 // status shows msg on stderr while a slow step runs. Call the returned function
 // when the step is done. Nothing is shown when stderr is not a terminal (pipes, scripts).
 func status(msg string) func() {

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"encoding/json"
+	"encoding/json/v2"
 	"errors"
 	"flag"
 	"fmt"
@@ -18,7 +18,7 @@ type result struct {
 }
 
 func runSearch(args []string) error {
-	fs := flag.NewFlagSet("search", flag.ExitOnError)
+	fs := flag.NewFlagSet("sell", flag.ExitOnError)
 	save := fs.Bool("s", false, "also save this search")
 	n := fs.Int("saved", 0, "run saved search #n")
 	fs.Parse(args)
@@ -36,7 +36,7 @@ func runSearch(args []string) error {
 		q = strings.Join(fs.Args(), " ")
 	}
 	if strings.TrimSpace(q) == "" {
-		return errors.New("usage: deals search [-s] <query> | deals search --saved <n>")
+		return errors.New("usage: deals sell [-s] <query> | deals search --saved <n>")
 	}
 
 	if err := search(q); err != nil {
@@ -62,7 +62,7 @@ func search(q string) error {
 	}
 
 	var results []result
-	if err := json.NewDecoder(resp.Body).Decode(&results); err != nil {
+	if err := json.UnmarshalRead(resp.Body, &results); err != nil {
 		return err
 	}
 	if len(results) == 0 {

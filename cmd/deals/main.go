@@ -4,19 +4,24 @@ import (
 	"fmt"
 	"os"
 	"runtime/debug"
+	"strings"
 )
 
 const helpText = `usage:
-  deals search <query>           find buyers matching your query
-  deals search -s <query>        run a search and save it
-  deals search --saved <n>       run saved search #n
+  deals sell <query>             find buyers for what you sell
+  deals sell -s <query>          run a search and save it
+  deals sell --saved <n>         run saved search #n
   deals saved                    list saved searches
   deals saved add <query>        save a search
   deals saved rm <n>             remove saved search #n
   deals unlock <id>              get a payment link for listing #id
   deals unlocked                 list contacts you unlocked
   deals unlocked rm <id>         remove an unlocked contact
-  deals buy --description <text> --email <email> --phone <phone>
+  deals buy                      post what you want to buy, so sellers can find you
+      --description <text>       what you want (10-500 chars)
+      --email <email>            your email
+      --phone <phone>            your phone, e.g. +15551234567
+  deals update                   update to the latest version
   deals version                  print version
   deals help                     show this help`
 
@@ -27,7 +32,7 @@ func main() {
 
 	var err error
 	switch os.Args[1] {
-	case "search":
+	case "sell":
 		err = runSearch(os.Args[2:])
 	case "buy":
 		err = runBuy(os.Args[2:])
@@ -39,7 +44,10 @@ func main() {
 		err = runUnlocked(os.Args[2:])
 	case "version", "-v", "--version":
 		fmt.Println(version())
+	case "update":
+		err = runUpdate(os.Args[2:])
 	case "help", "-h", "--help":
+		fmt.Print(logo())
 		fmt.Println(helpText)
 	default:
 		usage()
@@ -48,6 +56,11 @@ func main() {
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "error:", err)
 		os.Exit(1)
+	}
+	if os.Args[1] != "update" {
+		if n := updateNotice(); n != "" {
+			fmt.Fprintln(os.Stderr, n)
+		}
 	}
 }
 
@@ -60,12 +73,22 @@ func usage() {
 // set by release builds via -ldflags
 var buildVersion string
 
-func version() string {
+// currentVersion returns e.g. "0.1.0", or "" for local/dev builds.
+func currentVersion() string {
 	if buildVersion != "" {
-		return "deals " + buildVersion
+		return buildVersion
 	}
-	if info, ok := debug.ReadBuildInfo(); ok && info.Main.Version != "" {
-		return "deals " + info.Main.Version
+	if info, ok := debug.ReadBuildInfo(); ok {
+		if v := strings.TrimPrefix(info.Main.Version, "v"); v != "" && v != "(devel)" {
+			return v
+		}
+	}
+	return ""
+}
+
+func version() string {
+	if v := currentVersion(); v != "" {
+		return "deals " + v
 	}
 	return "deals (unknown version)"
 }
