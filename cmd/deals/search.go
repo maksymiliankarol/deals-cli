@@ -36,7 +36,7 @@ func runSearch(args []string) error {
 		q = strings.Join(fs.Args(), " ")
 	}
 	if strings.TrimSpace(q) == "" {
-		return errors.New("usage: deals sell [-s] <query> | deals search --saved <n>")
+		return errors.New("usage: deals sell [-s] <query> | deals sell --saved <n>")
 	}
 
 	if err := search(q); err != nil {

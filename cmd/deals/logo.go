@@ -12,7 +12,7 @@ var logoRows = [...]string{
 	"4501",
 	"4321",
 	" 32 ",
-}
+} 
 
 var logoColors = [...]string{"255;0;0", "255;0;255", "0;0;255", "0;255;255", "0;255;0", "255;255;0"}
 
@@ -41,6 +41,5 @@ func logo() string {
 		}
 		b.WriteByte('\n')
 	}
-	b.WriteByte('\n')
 	return b.String()
 }

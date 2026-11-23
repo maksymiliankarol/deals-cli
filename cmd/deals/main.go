@@ -25,9 +25,19 @@ const helpText = `usage:
   deals version                  print version
   deals help                     show this help`
 
+// title returns the bold app name, or "" when not on a colour terminal
+// (same guard as logo()).
+func title() string {
+	if !isTerminal(os.Stdout) || os.Getenv("NO_COLOR") != "" {
+		return ""
+	}
+	return "\n\x1b[1mM - Deals\x1b[m\n\n"
+}
+
 func main() {
 	if len(os.Args) < 2 {
-		usage()
+		printHelp()
+		return
 	}
 
 	var err error
@@ -47,8 +57,7 @@ func main() {
 	case "update":
 		err = runUpdate(os.Args[2:])
 	case "help", "-h", "--help":
-		fmt.Print(logo())
-		fmt.Println(helpText)
+		printHelp()
 	default:
 		usage()
 	}
@@ -64,8 +73,16 @@ func main() {
 	}
 }
 
+// printHelp shows the logo (in a colour terminal) and the help text on stdout.
+func printHelp() {
+	fmt.Print(logo())
+	fmt.Print(title())
+	fmt.Println(helpText)
+}
+
 // usage is for wrong input: help goes to stderr and the exit code is 1.
 func usage() {
+	fmt.Print(title())
 	fmt.Fprintln(os.Stderr, helpText)
 	os.Exit(1)
 }

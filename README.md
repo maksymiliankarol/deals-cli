@@ -3,9 +3,9 @@
 Command-line client for `deals-api`.
 
 ```bash
-deals search red ferrari
-deals search -s red ferrari      # run and save the query
-deals search --saved 1           # run saved search #1
+deals sell red ferrari
+deals sell -s red ferrari        # run and save the query
+deals sell --saved 1             # run saved search #1
 deals saved                      # list saved searches
 deals unlock 1                   # get a payment link for listing #1, wait for payment
 deals unlocked                   # list contacts you unlocked
@@ -64,11 +64,7 @@ Check it worked:
 deals version
 ```
 
-To upgrade, run `deals update` (Linux and macOS; on Windows download the zip again).
-It re-runs the installer into the folder where `deals` currently lives.
-
-`deals` checks for a new version at most once a day and prints a notice on stderr.
-Set `DEALS_NO_UPDATE_CHECK=1` to turn that off.
+To upgrade, run the same command again.
 
 ### Windows
 
@@ -94,7 +90,7 @@ Run `deals-api` in another terminal (`pnpm dev` on http://localhost:8787), then:
 
 ```bash
 export DEALS_API_URL=http://localhost:8787   # once per terminal session
-go run ./cmd/deals search red ferrari
+go run ./cmd/deals sell red ferrari
 ```
 
 To test `unlock` locally you also need Stripe forwarding to the API:
@@ -201,7 +197,7 @@ If a bad release is already public, also delete it on the GitHub Releases page
 cmd/deals/
   main.go      command dispatch, help, version
   client.go    API URL, shared HTTP client, friendly API errors
-  search.go    search command
+  search.go    sell command
   buy.go       buy command
   saved.go     saved searches (local JSON file), shared config path helper
   unlock.go    unlock command: payment link, wait for payment, reveal
