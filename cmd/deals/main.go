@@ -40,6 +40,11 @@ func main() {
 		return
 	}
 
+	var notice <-chan string
+	if os.Args[1] != "update" {
+		notice = checkForUpdate()
+	}
+
 	var err error
 	switch os.Args[1] {
 	case "sell":
@@ -66,8 +71,8 @@ func main() {
 		fmt.Fprintln(os.Stderr, "error:", err)
 		os.Exit(1)
 	}
-	if os.Args[1] != "update" {
-		if n := updateNotice(); n != "" {
+	if notice != nil {
+		if n := <-notice; n != "" {
 			fmt.Fprintln(os.Stderr, n)
 		}
 	}

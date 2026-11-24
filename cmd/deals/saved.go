@@ -137,4 +137,3 @@ func writeSaved(list []string) error {
 	}
 	return os.WriteFile(path, data, 0o600)
 }
-
